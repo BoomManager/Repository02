@@ -13,7 +13,21 @@ public class UserInfoServiceImpl implements UserInfoService {
     UserInfoMapper userInfoMapper;
     @Override
     public List<UserInfo> getUserInfo() {
-        List<UserInfo> userInfoList= userInfoMapper.selectAll();
-        return userInfoList;
+        return userInfoMapper.selectAll();
+    }
+
+    @Override
+    public Integer addUserInfo(UserInfo userinfo) {
+        return userInfoMapper.insert(userinfo);
+    }
+
+    @Override
+    public Integer deleteUserInfo(Integer id) {
+        return userInfoMapper.deleteById(id);
+    }
+
+    @Override
+    public Integer updateUserInfo(UserInfo userinfo) {
+        return userInfoMapper.updateById(userinfo);
     }
 }
