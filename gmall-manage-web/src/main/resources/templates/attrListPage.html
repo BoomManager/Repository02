@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<table id="dg" class="easyui-datagrid" title="平台属性列表" style="height:350px"
+       data-options="toolbar:'#tb',singleSelect:true,collapsible:true,url:'datagrid_data1.json',method:'get'">
+    <thead>
+        <tr>
+            <th data-options="field:'id',width:80">平台属性ID</th>
+            <th data-options="field:'attrName',width:100">平台属性名称</th>
+        </tr>
+    </thead>
+</table>
+    <div id="tb">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">编辑</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</a>
+        <br /><br />
+    一级分类：<select data-options="url:'getCatalog1',textField:'name',valueField:'id',
+        onSelect: function(rec){
+            var url = 'getCatalog2?catalog1Id='+rec.id;
+                $('#ctg2ForAttrList').combobox('clear');
+                $('#ctg2ForAttrList').combobox('reload', url);
+                $('#ctg3ForAttrList').combobox('clear');
+                $('#ctg3ForAttrList').combobox('reload', url);
+        }" class = "easyui-combobox" style = "width: 100px"></select>
+    二级分类：<select id="ctg2ForAttrList" data-options="textField:'name',valueField:'id',
+        onSelect: function(rec){
+            var url = 'getCatalog3?catalog2Id='+rec.id;
+                $('#ctg3ForAttrList').combobox('clear');
+                $('#ctg3ForAttrList').combobox('reload', url);
+            }" class = "easyui-combobox" style="width: 100px"></select>
+    三级分类：<select id = "ctg3ForAttrList" data-options="textField:'name',valueField:'id'"
+                 class="easyui-combobox" style="width: 100px"></select>
+        <a href="javascript:reloadAttrList();" class="easyui-linkbutton"
+           data-options="iconCls:'icon-add',plain:true">刷新属性</a>
+        <br /><br />
+    </div>
+
+<script language="JavaScript">
+    function reloadAttrList() {
+
+        // 获得当前的被选择的三级分类
+        var catalog3Id = $("#ctg3ForAttrList").combobox("getValue");
+        if(!catalog3Id){
+            catalog3Id = '61';
+        }
+
+        // 根据三级分类刷新属性列表
+        $("#dg").datagrid({
+            url:'getAttrList?catalog3Id='+catalog3Id
+        });
+
+    }
+</script>
+
+</body>
+</html>
