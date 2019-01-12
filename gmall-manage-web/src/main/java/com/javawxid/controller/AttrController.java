@@ -6,6 +6,7 @@ import com.javawxid.bean.BaseCatalog1;
 import com.javawxid.bean.BaseCatalog2;
 import com.javawxid.bean.BaseCatalog3;
 import com.javawxid.service.AttrService;
+import com.sun.net.httpserver.Authenticator;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,6 +18,12 @@ public class AttrController {
 
     @Reference
     AttrService attrService;
+
+    @RequestMapping("saveAttr")
+    @ResponseBody
+    public String saveAttr(BaseAttrInfo baseAttrInfo){
+        return attrService.saveAttr(baseAttrInfo);
+    }
 
     @RequestMapping("getAttrList")
     @ResponseBody

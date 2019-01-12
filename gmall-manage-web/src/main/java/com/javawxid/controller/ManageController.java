@@ -15,4 +15,6 @@ public class ManageController {
     public String doAttrListPage() {
         return "attrListPage";
     }
+
+
 }

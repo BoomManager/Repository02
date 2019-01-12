@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -21,8 +21,8 @@
     </thead>
 </table>
     <div id="tb">
-        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
-        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">编辑</a>
+        <a href="javascript:addAttrInfo();" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
+        <a href="javascript:editAttrInfo();" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">编辑</a>
         <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</a>
         <br /><br />
     一级分类：<select data-options="url:'getCatalog1',textField:'name',valueField:'id',
@@ -45,23 +45,22 @@
            data-options="iconCls:'icon-add',plain:true">刷新属性</a>
         <br /><br />
     </div>
+    <!--添加平台属性-->
+    <div id="dd" class="easyui-dialog" title="添加平台属性" style="width:500px;height:350px;"
+         data-options="iconCls:'icon-save',buttons:'#bb',closed:true,resizable:true,modal:true">
+        <br>
+        <br>
+        属性名称：<input class="easyui-textbox" id="attrName" style="width:300px">
+        <br>
+        <br>
+        <table class="easyui-datagrid" id="list" title="属性值列表"></table>
+    </div>
 
-<script language="JavaScript">
-    function reloadAttrList() {
+    <div id="bb">
+        <a href="javascript:saveAttr();" class="easyui-linkbutton">保存</a>
+        <a href="javascript:reloadAttrList();" class="easyui-linkbutton">关闭</a>
+    </div>
 
-        // 获得当前的被选择的三级分类
-        var catalog3Id = $("#ctg3ForAttrList").combobox("getValue");
-        if(!catalog3Id){
-            catalog3Id = '61';
-        }
-
-        // 根据三级分类刷新属性列表
-        $("#dg").datagrid({
-            url:'getAttrList?catalog3Id='+catalog3Id
-        });
-
-    }
-</script>
-
+    <div th:include="addEditDel"></div>
 </body>
 </html>

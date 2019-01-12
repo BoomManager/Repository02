@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<script language="JavaScript">
+
+    function saveAttr() {
+        var attrJSON = {};
+        var catalog3Id = $("#ctg3ForAttrList").combobox("getValue");
+        var attrName = $("#attrName").textbox("getValue");
+        var rows = $("#list").datagrid("getRows");
+        attrJSON["attrName"] = attrName;
+        attrJSON["catalog3Id"] = catalog3Id;
+        $(rows).each(function (i,row) {
+            attrJSON["attrValueList["+i+"].valueName"] = row.valueName;
+        })
+        // 将属性数据通过ajax异步上传到后台
+        $.post("saveAttr",attrJSON,function(data){
+            // 关闭属性对话框
+            $("#dd").dialog("close");
+            // 刷新属性列表
+            $("#dg").datagrid({
+                url:'getAttrList?catalog3Id='+catalog3Id
+            });
+            //清空文本框
+            $("#attrName").textbox('clear');
+            //删除所有行
+            var list=$("#list").datagrid({url:""});
+            list.datagrid('loadData', { total: 0, rows: [] });
+        })
+    }
+    function  addAttrInfo() {
+        var catalog3Id = $("#ctg3ForAttrList").combobox("getValue");
+        if(!catalog3Id){
+            alert("请选择三级分类！！！");
+            return;
+        }
+        //点击添加打开数据列表
+        $("#dd").dialog("open");
+        $("#list").datagrid({
+            onClickRow:function (rowIndex, rowData) {
+                //点击行进入编辑模式
+                $("#list").datagrid("beginEdit",rowIndex);
+                //获取行的数据
+                var valueName = rowData.valueName;
+                //设定当失去焦点时,退出编辑状态
+                $("input.datagrid-editable-input").val(valueName).bind("blur",function(evt){
+                    $("#list").datagrid("endEdit",rowIndex);
+                });
+            },
+            columns:[[
+                {field:'id',title:'属性值ID',width:'40%',sortable:true},
+                {field:'valueName',title:'属性值名称',width:'60%',sortable:true,
+                    editor:{
+                        type: 'validatebox',
+                        options:{required:true}
+                    }
+                }
+            ]],
+            toolbar: [{
+                iconCls: 'icon-add',
+                handler: function(){
+                    $('#list').datagrid('appendRow',{
+                        id:'',
+                        valueName:'请添加属性值'
+                    });
+                }
+            },'-',{
+                iconCls: 'icon-remove',
+                handler: function(){
+                    //获取行
+                    var row = $("#list").datagrid('getSelected');
+                    //获取行的索引
+                    var rowIndex = $("#list").datagrid('getRowIndex',row);
+                    //通过行的索引删除行
+                    $("#list").datagrid('deleteRow',rowIndex);
+                }
+            }]
+        })
+    }
+    function reloadAttrList() {
+        $("#dd").dialog("close");
+        // 获得当前的被选择的三级分类
+        var catalog3Id = $("#ctg3ForAttrList").combobox("getValue");
+        if(!catalog3Id){
+            return;
+        }
+        // 根据三级分类刷新属性列表
+        $("#dg").datagrid({
+            url:'getAttrList?catalog3Id='+catalog3Id
+        });
+    }
+</script>

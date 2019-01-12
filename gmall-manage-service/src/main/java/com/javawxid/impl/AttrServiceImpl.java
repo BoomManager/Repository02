@@ -1,14 +1,8 @@
 package com.javawxid.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.javawxid.bean.BaseAttrInfo;
-import com.javawxid.bean.BaseCatalog1;
-import com.javawxid.bean.BaseCatalog2;
-import com.javawxid.bean.BaseCatalog3;
-import com.javawxid.mapper.BaseAttrInfoMapper;
-import com.javawxid.mapper.BaseCatalog1Mapper;
-import com.javawxid.mapper.BaseCatalog2Mapper;
-import com.javawxid.mapper.BaseCatalog3Mapper;
+import com.javawxid.bean.*;
+import com.javawxid.mapper.*;
 import com.javawxid.service.AttrService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,6 +15,9 @@ public class AttrServiceImpl implements AttrService {
     BaseAttrInfoMapper baseAttrInfoMapper;
 
     @Autowired
+    BaseAttrValueMapper baseAttrValueMapper;
+
+    @Autowired
     BaseCatalog1Mapper baseCatalog1Mapper;
 
     @Autowired
@@ -28,6 +25,7 @@ public class AttrServiceImpl implements AttrService {
 
     @Autowired
     BaseCatalog3Mapper baseCatalog3Mapper;
+
 
     @Override
     public List<BaseCatalog1> getCatalog1() {
@@ -60,5 +58,23 @@ public class AttrServiceImpl implements AttrService {
         baseAttrInfo.setCatalog3Id(catalog3Id);
         List<BaseAttrInfo> baseAttrInfos = baseAttrInfoMapper.select(baseAttrInfo);
         return baseAttrInfos;
+    }
+
+    @Override
+    public String saveAttr(BaseAttrInfo baseAttrInfo) {
+        Integer integer = baseAttrInfoMapper.insert(baseAttrInfo);
+        if (integer>0){
+            //baseAttrInfo 插入后数据主键返回
+            String attrId = baseAttrInfo.getId();
+
+            List<BaseAttrValue> attrValueList = baseAttrInfo.getAttrValueList();
+
+            for (BaseAttrValue baseAttrValue : attrValueList) {
+                baseAttrValue.setAttrId(attrId);
+                baseAttrValueMapper.insertSelective(baseAttrValue);
+            }
+            return "成功";
+        }
+        return "失败";
     }
 }
