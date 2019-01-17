@@ -19,10 +19,15 @@ public class AttrController {
     @Reference
     AttrService attrService;
 
+
+
     @RequestMapping("saveAttr")
     @ResponseBody
     public String saveAttr(BaseAttrInfo baseAttrInfo){
-        return attrService.saveAttr(baseAttrInfo);
+        attrService.saveAttr(baseAttrInfo);
+
+        // 保存属性
+        return "success";
     }
 
     @RequestMapping("getAttrList")
@@ -36,7 +41,7 @@ public class AttrController {
 
     @RequestMapping("getCatalog1")
     @ResponseBody
-    private List<BaseCatalog1> getCatalog1(){
+    public List<BaseCatalog1> getCatalog1(){
 
         List<BaseCatalog1> baseCatalog1s = attrService.getCatalog1();
 

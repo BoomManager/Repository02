@@ -7,12 +7,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ManageController {
 
     @RequestMapping("index")
-    public String doIndex() {
+    public String index(){
         return "index";
     }
 
+    @RequestMapping("spuListPage")
+    public String spuListPage(){
+        return "spuListPage";
+    }
+
     @RequestMapping("attrListPage")
-    public String doAttrListPage() {
+    public String attrListPage(){
         return "attrListPage";
     }
 

@@ -6,6 +6,7 @@ import com.javawxid.mapper.*;
 import com.javawxid.service.AttrService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,7 +26,6 @@ public class AttrServiceImpl implements AttrService {
 
     @Autowired
     BaseCatalog3Mapper baseCatalog3Mapper;
-
 
     @Override
     public List<BaseCatalog1> getCatalog1() {
@@ -56,25 +56,36 @@ public class AttrServiceImpl implements AttrService {
     public List<BaseAttrInfo> getAttrList(String catalog3Id) {
         BaseAttrInfo baseAttrInfo = new BaseAttrInfo();
         baseAttrInfo.setCatalog3Id(catalog3Id);
+
+        //　平台属性集合
         List<BaseAttrInfo> baseAttrInfos = baseAttrInfoMapper.select(baseAttrInfo);
+
+        for (BaseAttrInfo attrInfo : baseAttrInfos) {
+            List<BaseAttrValue> baseAttrValues = new ArrayList<>();
+
+            BaseAttrValue baseAttrValue = new BaseAttrValue();
+            baseAttrValue.setAttrId(attrInfo.getId());
+
+            // 平台属性值集合
+            baseAttrValues = baseAttrValueMapper.select(baseAttrValue);
+            attrInfo.setAttrValueList(baseAttrValues);
+        }
+
         return baseAttrInfos;
     }
 
     @Override
-    public String saveAttr(BaseAttrInfo baseAttrInfo) {
-        Integer integer = baseAttrInfoMapper.insert(baseAttrInfo);
-        if (integer>0){
-            //baseAttrInfo 插入后数据主键返回
-            String attrId = baseAttrInfo.getId();
+    public void saveAttr(BaseAttrInfo baseAttrInfo) {
+        baseAttrInfoMapper.insertSelective(baseAttrInfo);
 
-            List<BaseAttrValue> attrValueList = baseAttrInfo.getAttrValueList();
+        //baseAttrInfo 插入后数据主键返回
+        String attrId = baseAttrInfo.getId();
 
-            for (BaseAttrValue baseAttrValue : attrValueList) {
-                baseAttrValue.setAttrId(attrId);
-                baseAttrValueMapper.insertSelective(baseAttrValue);
-            }
-            return "成功";
+        List<BaseAttrValue> attrValueList = baseAttrInfo.getAttrValueList();
+
+        for (BaseAttrValue baseAttrValue : attrValueList) {
+            baseAttrValue.setAttrId(attrId);
+            baseAttrValueMapper.insertSelective(baseAttrValue);
         }
-        return "失败";
     }
 }
