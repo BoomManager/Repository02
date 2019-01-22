@@ -28,6 +28,8 @@ public class SpuServiceImpl implements SpuService {
     @Autowired
     BaseSaleAttrMapper baseSaleAttrMapper;
 
+    @Autowired
+    SkuSaleAttrValueMapper skuSaleAttrValueMapper;
 
     @Override
     public List<SpuInfo> spuList(String catalog3id) {
@@ -112,5 +114,9 @@ public class SpuServiceImpl implements SpuService {
         List<SpuSaleAttr>  spuSaleAttrs = spuSaleAttrMapper.selectSpuSaleAttrListCheckBySku(spuId,skuId);
 
         return spuSaleAttrs;
+    }
+
+    public List<SkuInfo> getSkuSaleAttrValueListBySpu(String spuId) {
+        return skuSaleAttrValueMapper.selectSkuSaleAttrValueListBySpu(spuId);
     }
 }

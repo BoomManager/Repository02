@@ -1,10 +1,7 @@
 package com.javawxid.service;
 
 
-import com.javawxid.bean.BaseSaleAttr;
-import com.javawxid.bean.SpuImage;
-import com.javawxid.bean.SpuInfo;
-import com.javawxid.bean.SpuSaleAttr;
+import com.javawxid.bean.*;
 
 import java.util.List;
 
@@ -20,4 +17,6 @@ public interface SpuService {
     List<SpuImage> spuImageList(String spuId);
 
     List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(String spuId, String skuId);
+
+    List<SkuInfo> getSkuSaleAttrValueListBySpu(String spuId);
 }
