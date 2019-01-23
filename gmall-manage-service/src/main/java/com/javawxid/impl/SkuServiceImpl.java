@@ -100,4 +100,21 @@ public class SkuServiceImpl implements SkuService {
         jedis.close();
         return skuInfo;
     }
+
+    @Override
+    public List<SkuInfo> SkuListByCatalog3Id(String catalog3Id) {
+
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setCatalog3Id(catalog3Id);
+        List<SkuInfo> skuInfos = skuInfoMapper.select(skuInfo);
+
+        for (SkuInfo info : skuInfos) {
+            SkuAttrValue skuAttrValue = new SkuAttrValue();
+            skuAttrValue.setSkuId(info.getId());
+            List<SkuAttrValue> skuAttrValues = skuAttrValueMapper.select(skuAttrValue);
+            info.setSkuAttrValueList(skuAttrValues);
+        }
+
+        return skuInfos;
+    }
 }

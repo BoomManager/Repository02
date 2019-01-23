@@ -10,4 +10,8 @@ public interface SkuService {
     SkuInfo getSkuInfo(String skuId);
 
     SkuInfo item(String skuId, String remoteAddr);
+
+    List<SkuInfo> SkuListByCatalog3Id(String s);
+
+
 }

@@ -88,4 +88,10 @@ public class AttrServiceImpl implements AttrService {
             baseAttrValueMapper.insertSelective(baseAttrValue);
         }
     }
+
+    @Override
+    public List<BaseAttrInfo> getAttrListByValueIds(String join) {
+        List<BaseAttrInfo> baseAttrInfos = baseAttrInfoMapper.selectAttrListByValueIds(join);
+        return baseAttrInfos;
+    }
 }
