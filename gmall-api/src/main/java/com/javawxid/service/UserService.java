@@ -15,4 +15,10 @@ public interface UserService {
     UserAddress getAddressListById(String addressId);
 
     List<UserInfo> getUserList();
+
+    UserInfo login(UserInfo userInfo);
+
+    void addUserCache(UserInfo userLogin);
+
+    UserAddress getAddressById(String addressId);
 }

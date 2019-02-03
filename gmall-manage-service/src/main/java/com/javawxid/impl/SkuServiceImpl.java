@@ -117,4 +117,12 @@ public class SkuServiceImpl implements SkuService {
 
         return skuInfos;
     }
+
+    @Override
+    public SkuInfo getSkuById(String skuId) {
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setId(skuId);
+        skuInfo = skuInfoMapper.selectOne(skuInfo);
+        return skuInfo;
+    }
 }
