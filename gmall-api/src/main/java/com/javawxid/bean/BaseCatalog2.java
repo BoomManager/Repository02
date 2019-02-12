@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @param
@@ -19,6 +20,16 @@ public class BaseCatalog2 implements Serializable {
     private String name;
     @Column
     private String catalog1Id;
+
+    private List<BaseCatalog3> baseCatalog3List;
+
+    public List<BaseCatalog3> getBaseCatalog3List() {
+        return baseCatalog3List;
+    }
+
+    public void setBaseCatalog3List(List<BaseCatalog3> baseCatalog3List) {
+        this.baseCatalog3List = baseCatalog3List;
+    }
 
     public String getId() {
         return id;

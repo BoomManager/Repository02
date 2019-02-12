@@ -1,9 +1,11 @@
 package com.javawxid.service.Impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.javawxid.bean.BaseCatalog1;
 import com.javawxid.bean.SkuLsInfo;
 import com.javawxid.bean.SkuLsParam;
 import com.javawxid.service.ListService;
+import com.javawxid.mapper.BaseCatalog1Mapper;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
@@ -28,6 +30,15 @@ import java.util.Map;
 public class ListServiceImpl implements ListService {
     @Autowired
     JestClient jestClient;
+
+    @Autowired
+    BaseCatalog1Mapper catalog1Mapper;
+
+    @Override
+    public List<BaseCatalog1> catalogJson() {
+        List<BaseCatalog1> baseCatalog1List = catalog1Mapper.selectCatalog1();
+        return baseCatalog1List;
+    }
 
     @Override
     public List<SkuLsInfo> list(SkuLsParam skuLsParam) {
@@ -67,6 +78,7 @@ public class ListServiceImpl implements ListService {
         }
         return skuLsInfos;
     }
+
 
     public String getMyDsl(SkuLsParam skuLsParam) {
         // 查询语句封装
