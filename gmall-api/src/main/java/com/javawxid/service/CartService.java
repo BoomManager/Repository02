@@ -15,4 +15,5 @@ public interface CartService {
     void flushCartCacheByUser(String userId);
 
     List<CartInfo> cartListFromCache(String userId);
+
 }

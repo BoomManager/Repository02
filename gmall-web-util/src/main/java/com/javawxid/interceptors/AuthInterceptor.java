@@ -12,20 +12,18 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.invoke.MethodHandle;
 import java.util.Map;
 
 @Component
 public class AuthInterceptor extends HandlerInterceptorAdapter {
 
-
+    //在执行目标handler方法之前执行，如果返回true，则继续执行后续拦截器和目标handler方法；如果返回false则不执行。注意：返回false时最好借助转发或重定向等方式为客户端提供一个响应页面。
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         // 注解判断
         HandlerMethod hm = (HandlerMethod) handler;
-
+        //获取到那个方法使用了@LoginRequired注解
         LoginRequired methodAnnotation = hm.getMethodAnnotation(LoginRequired.class);
-
 
         String token = "";
         String newToken = request.getParameter("newToken");
@@ -61,7 +59,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                     request.setAttribute("userId",userId);
                 }
             }
-
             // 校验不通过，并且必须登陆
             if (loginCheck == false && methodAnnotation.isNeedLogin() == true) {
                 response.sendRedirect("http://passport.gmall.com:8085/index?returnUrl=" + request.getRequestURL());

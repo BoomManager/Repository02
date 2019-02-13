@@ -109,10 +109,9 @@ public class CartController {
     }
 
     @RequestMapping("addToCart")
+    @LoginRequired(isNeedLogin = false)//是否必须登录
     public String addToCart(HttpServletRequest request, HttpServletResponse response, String skuId, Integer num,ModelMap map) {
-        //用户登录了添加购物车，这里只是测试
-        //String userId = "1";
-        //用户没有登录添加购物车
+        //用户是否登录添加购物车
         String userId = (String)request.getAttribute("userId");
         SkuInfo skuInfo = skuService.getSkuById(skuId);
         CartInfo cartInfo = new CartInfo();
@@ -174,7 +173,7 @@ public class CartController {
             // 同步redis缓存
             cartService.flushCartCacheByUser(userId);
         }
-        //后台传出的skuInfo会将静态数据“购物车商品名称”替换掉
+        //后台传出的skuInfo会将静态数据“购物车商品名称”替换掉，没有实现该功能
         map.put("skuInfo",skuInfo);
         return "redirect:http://cart.gmall.com:8084/success.html";
     }
