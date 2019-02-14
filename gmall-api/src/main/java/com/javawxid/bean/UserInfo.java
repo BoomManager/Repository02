@@ -108,4 +108,20 @@ public class UserInfo implements Serializable {
     public void setUserLevel(String userLevel) {
         this.userLevel = userLevel;
     }
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "id='" + id + '\'' +
+                ", loginName='" + loginName + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", passwd='" + passwd + '\'' +
+                ", name='" + name + '\'' +
+                ", phoneNum='" + phoneNum + '\'' +
+                ", email='" + email + '\'' +
+                ", headImg='" + headImg + '\'' +
+                ", userLevel='" + userLevel + '\'' +
+                ", userAddressList=" + userAddressList +
+                '}';
+    }
 }

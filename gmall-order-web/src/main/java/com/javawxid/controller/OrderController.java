@@ -138,7 +138,9 @@ public class OrderController {
         map.put("userAddressList",userAddressList);
         map.put("orderDetailList",orderDetailList);
         map.put("totalAmount",getMySum(cartInfos));
-
+        UserInfo userInfo = userService.getUserById(userId);
+        String nickName = userInfo.getNickName();
+        map.put("nickName",nickName);
         // 生成交易码，写入缓存
         String tradeCode = UUID.randomUUID().toString();
         map.put("tradeCode",tradeCode);

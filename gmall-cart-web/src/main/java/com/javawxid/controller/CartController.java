@@ -5,16 +5,17 @@ import com.alibaba.fastjson.JSON;
 import com.javawxid.annotations.LoginRequired;
 import com.javawxid.bean.CartInfo;
 import com.javawxid.bean.SkuInfo;
+import com.javawxid.bean.UserInfo;
 import com.javawxid.service.CartService;
 import com.javawxid.service.SkuService;
+import com.javawxid.service.UserService;
 import com.javawxid.util.CookieUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Cookie;
+
+import javax.servlet.http.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
@@ -29,6 +30,9 @@ public class CartController {
 
     @Reference
     SkuService skuService;
+
+    @Reference
+    UserService userService;
 
 /*    去8086
     @LoginRequired(isNeedLogin = true)
@@ -75,9 +79,14 @@ public class CartController {
 
     @LoginRequired(isNeedLogin = false)
     @RequestMapping("cartList")
-    public String cartList(HttpServletRequest request, HttpServletResponse response, ModelMap map) {
+    public String cartList(HttpServletRequest request,ModelMap map) {
         //获取请求中的userId
         String userId = (String)request.getAttribute("userId");
+        UserInfo userInfo = userService.getUserById(userId);
+        if(userInfo!=null){
+            String nickName = userInfo.getNickName();
+            map.put("nickName",nickName);
+        }
         List<CartInfo> cartList = new ArrayList<>();
         //判断用户是否登录
         if (StringUtils.isNotBlank(userId)) {

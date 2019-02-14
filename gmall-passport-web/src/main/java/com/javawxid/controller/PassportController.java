@@ -3,6 +3,7 @@ package com.javawxid.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.javawxid.bean.UserInfo;
 import com.javawxid.service.UserService;
+import com.javawxid.util.CookieUtil;
 import com.javawxid.util.JwtUtil;
 import com.javawxid.util.MD5Utils;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +12,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +36,7 @@ public class PassportController {
 
     @RequestMapping("login")
     @ResponseBody
-    public String login(UserInfo userInfo, HttpServletRequest request, ModelMap map){
+    public String login(UserInfo userInfo, HttpServletRequest request, HttpServletResponse response, ModelMap map){
         String token = "";
         // 用户名和密码进行验证
         UserInfo userLogin = userService.login(userInfo);
@@ -44,7 +47,9 @@ public class PassportController {
             // 生成token
             HashMap<String, String> stringStringHashMap = new HashMap<>();
             stringStringHashMap.put("userId",userLogin.getId());
-            stringStringHashMap.put("nickName",userLogin.getNickName());
+            String id = userLogin.getId();
+            //将userId保存到cookie中
+            CookieUtil.setCookie(request,response,"userId",userLogin.getId(),60*60*24,true);
             String nip = request.getHeader("request-forwared-for");// nginx中的
             if(StringUtils.isBlank(nip)){
                 nip = request.getRemoteAddr();// servlet中ip

@@ -4,11 +4,18 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.javawxid.bean.BaseCatalog1;
+import com.javawxid.bean.UserInfo;
 import com.javawxid.service.ListService;
+import com.javawxid.service.UserService;
+import com.javawxid.util.CookieUtil;
 import com.javawxid.util.CreateFileUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 @Controller
@@ -17,9 +24,18 @@ public class IndexController {
     @Reference
     ListService listService;
 
+    @Reference
+    UserService userService;
 
     @RequestMapping("index")
-    public String index(){
+    public String index(HttpServletRequest request,ModelMap modelMap){
+        //从cookie中获取userID
+        String userId = CookieUtil.getCookieValue(request, "userId", true);
+        UserInfo userInfo = userService.getUserById(userId);
+        if(userInfo != null){
+            String nickName = userInfo.getNickName();
+            modelMap.put("nickName",nickName);
+        }
         return "index";
     }
 

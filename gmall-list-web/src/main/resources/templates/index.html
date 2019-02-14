@@ -96,14 +96,14 @@
         <ul>
           <li>
             <input type="hidden" value="${loginName}"/>
-            <a href="http://passport.gmall.com:8085/index.html" th:text="(${loginName}==null)?'你好，请登录':${loginName}"></a>
+            <a href="http://passport.gmall.com:8085/index.html" th:text="(${nickName}==null)?'请登录':${nickName}"> </a>
           </li>
           <li>
             <a href="/注册页面\index.html" class="li_2">免费注册</a>
           </li>
           <span>|</span>
           <li>
-            <a href="#">我的订单</a>
+            <a href="http://order.gmall.com:8086/toTrade">我的订单</a>
           </li>
 
 

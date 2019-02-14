@@ -2,6 +2,7 @@ package com.javawxid.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
+import com.javawxid.bean.SkuInfo;
 import com.javawxid.bean.UserAddress;
 import com.javawxid.bean.UserInfo;
 import com.javawxid.mapper.UserAddressMapper;
@@ -74,8 +75,22 @@ public class UserServiceImpl implements UserService {
         Jedis jedis = redisUtil.getJedis();
         // 设置用户缓存
         jedis.setex("user:"+userLogin.getId()+":info",60*60*24, JSON.toJSONString(userLogin));
-
         jedis.close();
+    }
+    @Override
+    public UserInfo getUserCache(String id) {
+        UserInfo userInfo = new UserInfo();
+        Jedis jedis = redisUtil.getJedis();
+        String user = jedis.get("user:" + id + ":info");
+        userInfo = JSON.parseObject(user, UserInfo.class);
+        return userInfo;
+    }
+
+    @Override
+    public UserInfo getUserById(String userId) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(userId);
+        return userInfoMapper.selectOne(userInfo);
     }
 
     @Override
@@ -87,4 +102,6 @@ public class UserServiceImpl implements UserService {
 
         return userAddress1;
     }
+
+
 }

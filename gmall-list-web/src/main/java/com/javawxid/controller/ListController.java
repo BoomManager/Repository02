@@ -4,11 +4,15 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.javawxid.bean.*;
 import com.javawxid.service.AttrService;
 import com.javawxid.service.ListService;
+import com.javawxid.service.UserService;
+import com.javawxid.util.CookieUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.BeanUtils;
+
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -20,8 +24,11 @@ public class ListController {
     @Reference
     AttrService attrService;
 
+    @Reference
+    UserService userService;
+
     @RequestMapping("list.html")
-    public String doList(SkuLsParam skuLsParam, ModelMap map){
+    public String doList(SkuLsParam skuLsParam, HttpServletRequest request, ModelMap map){
         List<SkuLsInfo> skuLsInfoList = listService.list(skuLsParam);
         Set<String> valueIds = new HashSet<>();
         for (SkuLsInfo skuLsInfo : skuLsInfoList) {
@@ -65,6 +72,13 @@ public class ListController {
         // 根据当前请求参数对象，生成当前请求参数字符串
         String urlParam = getMyUrlParam(skuLsParam);
         map.put("urlParam",urlParam);
+        //从cookie中获取userID
+        String userId = CookieUtil.getCookieValue(request, "userId", true);
+        UserInfo userInfo = userService.getUserById(userId);
+        if(userInfo != null){
+            String nickName = userInfo.getNickName();
+            map.put("nickName",nickName);
+        }
         return "list";
     }
     private String getMyCrumbUrlParam(SkuLsParam skuLsParam, String... crumbValueId) {

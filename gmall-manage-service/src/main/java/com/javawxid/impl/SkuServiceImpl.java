@@ -69,7 +69,7 @@ public class SkuServiceImpl implements SkuService {
         SkuInfo skuInfo = null;
         //从redis获取redis的客户端jedis
         Jedis jedis = redisUtil.getJedis();
-        // 从缓存中取出skuId的数据
+        // 从缓存中取出skuId的数据jedis.set
         String skuInfoStr = jedis.get("sku:"+skuId+":info");
         //Json格式转成实体类类型
         skuInfo = JSON.parseObject(skuInfoStr, SkuInfo.class);

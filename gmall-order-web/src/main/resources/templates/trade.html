@@ -16,7 +16,7 @@
 				<ul class="header-left">
 					<li>
 						<img src="img/header_1.png"/>
-						<a href="">首页</a>
+						<a href="http://list.gmall.com:8083/index">首页</a>
 					</li>
 					<li class="header-l-2">
 						<i class="fa fa-map-marker" style="color: #5C5452;"></i>
@@ -26,10 +26,12 @@
 
 				</ul>
 				<ul class="header-right">
-					<li th:text="'你好，'+${nickName}"> </li>
+					<li>
+						<a href="http://passport.gmall.com:8085/index.html" th:text="(${nickName}==null)?'请登录':${nickName}"></a>
+					</li>
 					<li>|</li>
 					<li class="spacer"></li>
-					<li><a href="">我的订单</a></li>
+					<li><a href="http://cart.gmall.com:8084/cartList">我的购物车</a></li>
 					<li class="spacer"></li>
 
 				</ul>

@@ -21,4 +21,8 @@ public interface UserService {
     void addUserCache(UserInfo userLogin);
 
     UserAddress getAddressById(String addressId);
+
+    UserInfo getUserCache(String id);
+
+    UserInfo getUserById(String userId);
 }
