@@ -24,19 +24,15 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         HandlerMethod hm = (HandlerMethod) handler;
         //获取到那个方法使用了@LoginRequired注解
         LoginRequired methodAnnotation = hm.getMethodAnnotation(LoginRequired.class);
-
         String token = "";
         String newToken = request.getParameter("newToken");
         String oldToken = CookieUtil.getCookieValue(request, "oldToken", true);
-
         if(StringUtils.isNotBlank(oldToken)){
             token = oldToken;
         }
-
         if(StringUtils.isNotBlank(newToken)){
             token = newToken;
         }
-
         if (methodAnnotation != null) {
             // 校验
             boolean loginCheck = false;
@@ -57,6 +53,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                     Map userMap = JwtUtil.decode("gmallkey", token, MD5Utils.md5(nip));
                     String userId = (String)userMap.get("userId");
                     request.setAttribute("userId",userId);
+                    CookieUtil.setCookie(request,response,"userId",userId,60*60*24*7,true);
                 }
             }
             // 校验不通过，并且必须登陆

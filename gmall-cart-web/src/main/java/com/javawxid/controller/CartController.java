@@ -46,7 +46,8 @@ public class CartController {
     @RequestMapping("checkCart")
     public String checkCart(CartInfo cartInfo, HttpServletRequest request, HttpServletResponse response, ModelMap map) {
         // 远程http的rest风格的ws的调用代码
-        String userId = (String)request.getAttribute("userId");
+        //String userId = (String)request.getAttribute("userId");
+        String userId = CookieUtil.getCookieValue(request, "userId", true);
         List<CartInfo> cartList = new ArrayList<>();
         if (StringUtils.isNotBlank(userId)) {
             cartList = cartService.cartListFromCache(userId);
@@ -80,8 +81,8 @@ public class CartController {
     @LoginRequired(isNeedLogin = false)
     @RequestMapping("cartList")
     public String cartList(HttpServletRequest request,ModelMap map) {
-        //获取请求中的userId
-        String userId = (String)request.getAttribute("userId");
+        //String userId = (String)request.getAttribute("userId");
+        String userId = CookieUtil.getCookieValue(request, "userId", true);
         UserInfo userInfo = userService.getUserById(userId);
         if(userInfo!=null){
             String nickName = userInfo.getNickName();
@@ -121,7 +122,8 @@ public class CartController {
     @LoginRequired(isNeedLogin = false)//是否必须登录
     public String addToCart(HttpServletRequest request, HttpServletResponse response, String skuId, Integer num,ModelMap map) {
         //用户是否登录添加购物车
-        String userId = (String)request.getAttribute("userId");
+        //String userId = (String)request.getAttribute("userId");
+        String userId = CookieUtil.getCookieValue(request, "userId", true);
         SkuInfo skuInfo = skuService.getSkuById(skuId);
         CartInfo cartInfo = new CartInfo();
         cartInfo.setSkuId(skuId);

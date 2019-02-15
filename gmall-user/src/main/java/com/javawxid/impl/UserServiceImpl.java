@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     public UserInfo getUserById(String userId) {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(userId);
-        return userInfoMapper.selectOne(userInfo);
+        return userInfoMapper.selectByPrimaryKey(userInfo);
     }
 
     @Override

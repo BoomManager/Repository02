@@ -26,7 +26,6 @@ public class PassportController {
     @ResponseBody
     public String verify(HttpServletRequest request,String requestId,String token, ModelMap map){
         Map userMap = JwtUtil.decode("gmallkey", token, MD5Utils.md5(requestId));
-
         if(userMap!=null){//{status:success,userId:2}
             return "success";
         }else{
@@ -49,7 +48,7 @@ public class PassportController {
             stringStringHashMap.put("userId",userLogin.getId());
             String id = userLogin.getId();
             //将userId保存到cookie中
-            CookieUtil.setCookie(request,response,"userId",userLogin.getId(),60*60*24,true);
+            CookieUtil.setCookie(request,response,"userId",userLogin.getId(),60*60*24*7,true);
             String nip = request.getHeader("request-forwared-for");// nginx中的
             if(StringUtils.isBlank(nip)){
                 nip = request.getRemoteAddr();// servlet中ip
@@ -61,7 +60,6 @@ public class PassportController {
             // 将用户数据放入缓存
             userService.addUserCache(userLogin);
         }
-
         return token;
     }
 

@@ -8,6 +8,7 @@ import com.javawxid.service.CartService;
 import com.javawxid.service.OrderService;
 import com.javawxid.service.SkuService;
 import com.javawxid.service.UserService;
+import com.javawxid.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
@@ -37,21 +38,18 @@ public class OrderController {
     @LoginRequired(isNeedLogin = true)
     @RequestMapping("submitOrder")
     public String submitOrder(String deliveryAddressId,String tradeCode,HttpServletRequest request, HttpServletResponse response, ModelMap map) {
-        String userId = (String)request.getAttribute("userId");
-
+        //String userId = (String)request.getAttribute("userId");
+       String userId = CookieUtil.getCookieValue(request, "userId", true);
         boolean b = orderService.checkTradeCode(tradeCode,userId);
-
         if(b){
-
             UserAddress userAddress = userService.getAddressById(deliveryAddressId);
             List<CartInfo> cartInfos = cartService.cartListFromCache(userId);
-
             // 订单保存业务(订单数据的一致性校验，库存价格)
             // 对订单对象进行封装
             OrderInfo orderInfo = new OrderInfo();
             orderInfo.setProcessStatus("订单已提交");
             orderInfo.setOrderStatus("订单已提交");
-            String outTradeNo = "atguigu"+userId;
+            String outTradeNo = "javawxid"+userId;
             Date date = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             String format = sdf.format(date);
@@ -61,7 +59,7 @@ public class OrderController {
             orderInfo.setPaymentWay(PaymentWay.ONLINE);
             BigDecimal mySum = getMySum(cartInfos);
             orderInfo.setTotalAmount(mySum);
-            orderInfo.setOrderComment("尚硅谷商城");
+            orderInfo.setOrderComment("硅谷商城");
             orderInfo.setDeliveryAddress(userAddress.getUserAddress());
             orderInfo.setCreateTime(new Date());
             orderInfo.setConsignee(userAddress.getConsignee());
@@ -109,8 +107,8 @@ public class OrderController {
     @LoginRequired(isNeedLogin = true)
     @RequestMapping("toTrade")
     public String toTrade(HttpServletRequest request, HttpServletResponse response, ModelMap map) {
-
-        String userId = (String)request.getAttribute("userId");
+        String userId = CookieUtil.getCookieValue(request, "userId", true);
+        //String userId = (String)request.getAttribute("userId");
         // 根据userid查询缓存中的购物车数据
         List<CartInfo> cartInfos = cartService.cartListFromCache(userId);
 
@@ -130,8 +128,6 @@ public class OrderController {
             }
 
         }
-        
-
         // 查询userid的收货人列表信息
         List<UserAddress> userAddressList = userService.getAddressListByUserId(userId);
 

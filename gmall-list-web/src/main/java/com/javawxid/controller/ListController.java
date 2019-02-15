@@ -27,10 +27,19 @@ public class ListController {
     @Reference
     UserService userService;
 
+    /**
+     * 三级分类id下的商品消息列表
+     * @param skuLsParam
+     * @param request
+     * @param map
+     * @return
+     */
     @RequestMapping("list.html")
     public String doList(SkuLsParam skuLsParam, HttpServletRequest request, ModelMap map){
+        //通过三级分类id查询出该分类下商品消息
         List<SkuLsInfo> skuLsInfoList = listService.list(skuLsParam);
         Set<String> valueIds = new HashSet<>();
+        //遍历商品消息
         for (SkuLsInfo skuLsInfo : skuLsInfoList) {
             List<SkuLsAttrValue> skuAttrValueList = skuLsInfo.getSkuAttrValueList();
             for (SkuLsAttrValue skuLsAttrValue : skuAttrValueList) {
@@ -43,10 +52,13 @@ public class ListController {
         List<BaseAttrInfo> attrList = new ArrayList<>();
         attrList = attrService.getAttrListByValueIds(join);
         map.put("skuLsInfoList",skuLsInfoList);
+
+        // 去掉已经提交的属性
         String[] valueId = skuLsParam.getValueId();
         List<AtrrValueCrumb> atrrValueCrumbs = new ArrayList<>();
         if(valueId!=null&&valueId.length>0){
             Iterator<BaseAttrInfo> iterator = attrList.iterator();
+            //迭代
             while (iterator.hasNext()) {
                 List<BaseAttrValue> attrValueList = iterator.next().getAttrValueList();
                 for (BaseAttrValue baseAttrValue : attrValueList) {
@@ -67,11 +79,14 @@ public class ListController {
                 }
             }
         }
+
         map.put("attrValueSelectedList",atrrValueCrumbs);
         map.put("attrList",attrList);
+
         // 根据当前请求参数对象，生成当前请求参数字符串
         String urlParam = getMyUrlParam(skuLsParam);
         map.put("urlParam",urlParam);
+
         //从cookie中获取userID
         String userId = CookieUtil.getCookieValue(request, "userId", true);
         UserInfo userInfo = userService.getUserById(userId);

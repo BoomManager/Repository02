@@ -16,7 +16,7 @@
     <div class="header_head_box">
         <b class="header_head_p">
             <div style="overflow: hidden">
-                <a href="#" class="header_head_p_a1">
+                <a href="http://list.gmall.com:8083/index" class="header_head_p_a1">
                     首页
                 </a>
             </div>
@@ -71,11 +71,10 @@
         </div>
         <i><img src="/list/image/right-@1x.png" alt=""></i>
         <span th:if="${keyword}!=null" th:text="'&quot;'+${keyword}+'&quot;'">&quot;小米&quot;</span>
-        <a class="select-attr"   th:each="baseAttrValueSelected:${attrValueSelectedList}"    th:href="'list.html?'+${baseAttrValueSelected.urlParam}"   th:utext=" ${baseAttrValueSelected.valueName} +'<b> ✖ </b>'"  > 2G<b> ✖ </b>
+        <a class="select-attr"   th:each="baseAttrValueSelected:${attrValueSelectedList}" th:href="'list.html?'+${baseAttrValueSelected.urlParam}"   th:utext=" ${baseAttrValueSelected.valueName} +'<b> ✖ </b>'"  > 2G<b> ✖ </b>
         </a>
         <!-- <a class="select-attr"   href="#"      > 屏幕尺寸:5.1-5.5英寸<b> ✖ </b>
         </a>-->
-
     </div>
 </div>
  
